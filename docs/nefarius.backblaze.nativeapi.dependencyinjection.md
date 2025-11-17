@@ -2,6 +2,8 @@
 
 Namespace: Nefarius.Backblaze.NativeApi
 
+Provides extension methods for setting up dependencies related to Backblaze B2 cloud storage.
+
 ```csharp
 public static class DependencyInjection
 ```
@@ -12,6 +14,8 @@ Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) 
 
 ### <a id="methods-addbackblazeuploader"/>**AddBackblazeUploader(IServiceCollection, Action&lt;BackblazeOptions&gt;)**
 
+Registers services required for using Backblaze B2 cloud storage within the dependency injection container.
+
 ```csharp
 public static IServiceCollection AddBackblazeUploader(IServiceCollection services, Action<BackblazeOptions> configureOptions)
 ```
@@ -19,9 +23,12 @@ public static IServiceCollection AddBackblazeUploader(IServiceCollection service
 #### Parameters
 
 `services` IServiceCollection<br>
+The service collection to add the Backblaze services to.
 
 `configureOptions` [Action&lt;BackblazeOptions&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.action-1)<br>
+An action to configure [BackblazeOptions](./nefarius.backblaze.nativeapi.backblazeoptions.md) with necessary credentials and
+ settings.
 
 #### Returns
 
-IServiceCollection
+The updated service collection with Backblaze services registered.

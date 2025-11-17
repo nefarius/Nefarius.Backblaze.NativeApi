@@ -2,6 +2,8 @@
 
 Namespace: Nefarius.Backblaze.NativeApi
 
+Represents an interface for uploading files or streams to Backblaze B2 cloud storage.
+
 ```csharp
 public interface IBackblazeUploader
 ```
