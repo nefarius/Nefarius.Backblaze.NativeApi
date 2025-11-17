@@ -111,7 +111,7 @@ public class BackblazeUploader : IBackblazeUploader
 
         // Content-Disposition (UTF-8 + fallback)
         var contentDisposition =
-            $"attachment; filename=\"{asciiFallback}\"; filename*=UTF-8''{utf8FileName}";
+            Uri.EscapeDataString($"attachment; filename=\"{asciiFallback}\"; filename*=UTF-8''{utf8FileName}");
 
         var response = await api.UploadAsync(
             uploadUrl.AuthorizationToken,
