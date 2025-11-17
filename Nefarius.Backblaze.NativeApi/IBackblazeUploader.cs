@@ -1,5 +1,8 @@
 ﻿namespace Nefarius.Backblaze.NativeApi;
 
+/// <summary>
+///     Represents an interface for uploading files or streams to Backblaze B2 cloud storage.
+/// </summary>
 public interface IBackblazeUploader
 {
     /// <summary>

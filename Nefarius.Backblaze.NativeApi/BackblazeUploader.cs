@@ -11,11 +11,22 @@ using Refit;
 
 namespace Nefarius.Backblaze.NativeApi;
 
+/// <summary>
+///     Provides functionality for uploading files or streams to Backblaze B2 cloud storage.
+///     Implements the <see cref="IBackblazeUploader" /> interface.
+/// </summary>
 public class BackblazeUploader : IBackblazeUploader
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly BackblazeOptions _options;
 
+    /// <summary>
+    ///     Represents a class that facilitates the upload of files or streams to Backblaze B2 cloud storage.
+    /// </summary>
+    /// <remarks>
+    ///     This class depends on <see cref="IHttpClientFactory" /> for HTTP communication and requires
+    ///     Backblaze configuration settings through <see cref="BackblazeOptions" />.
+    /// </remarks>
     public BackblazeUploader(
         IOptions<BackblazeOptions> options,
         IHttpClientFactory httpClientFactory)
@@ -43,6 +54,17 @@ public class BackblazeUploader : IBackblazeUploader
     // PUBLIC OVERLOADS
     // ---------------------------------------------------------------------
 
+    /// <summary>
+    ///     Uploads a file to Backblaze B2 cloud storage using the specified file path.
+    /// </summary>
+    /// <param name="filePath">The full path of the file to upload.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when <paramref name="filePath" /> is null, empty, or consists only of
+    ///     whitespace.
+    /// </exception>
+    /// <exception cref="FileNotFoundException">Thrown when the file specified by <paramref name="filePath" /> does not exist.</exception>
+    /// <returns>A task that represents the asynchronous upload operation.</returns>
     public async Task UploadAsync(string filePath, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
@@ -58,6 +80,18 @@ public class BackblazeUploader : IBackblazeUploader
         await UploadInternalAsync(stream, fileName, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>
+    ///     Uploads a file to Backblaze B2 cloud storage.
+    /// </summary>
+    /// <param name="filePath">The full path of the file to upload.</param>
+    /// <param name="targetFileName">The name of the file as it will appear in the target storage location.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
+    /// <exception cref="ArgumentException">
+    ///     Thrown if <paramref name="filePath" /> or <paramref name="targetFileName" /> is
+    ///     null or whitespace.
+    /// </exception>
+    /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist at <paramref name="filePath" />.</exception>
+    /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
     public async Task UploadAsync(string filePath, string targetFileName, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
@@ -72,6 +106,15 @@ public class BackblazeUploader : IBackblazeUploader
         await UploadInternalAsync(stream, targetFileName, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>
+    ///     Uploads a stream of content to Backblaze B2 cloud storage with a specified target file name.
+    /// </summary>
+    /// <param name="content">The content stream to upload.</param>
+    /// <param name="targetFileName">The name of the target file in the storage.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>A task that represents the asynchronous upload operation.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="content" /> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="targetFileName" /> is null or whitespace.</exception>
     public async Task UploadAsync(Stream content, string targetFileName, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(content);
