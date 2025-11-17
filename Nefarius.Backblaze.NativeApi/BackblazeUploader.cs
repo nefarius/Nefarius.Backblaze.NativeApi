@@ -2,6 +2,8 @@
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
+using Nefarius.Backblaze.NativeApi.WebApi;
+using Nefarius.Backblaze.NativeApi.WebApi.Models;
 using Refit;
 
 namespace Nefarius.Backblaze.NativeApi;
