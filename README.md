@@ -5,4 +5,6 @@
 [![Nuget](https://img.shields.io/nuget/v/Nefarius.Backblaze.NativeApi)](https://www.nuget.org/packages/Nefarius.Backblaze.NativeApi/)
 [![Nuget](https://img.shields.io/nuget/dt/Nefarius.Backblaze.NativeApi)](https://www.nuget.org/packages/Nefarius.Backblaze.NativeApi/)
 
+Small wrapper for Backblaze B2 Native API using Refit.
+
 WIP
