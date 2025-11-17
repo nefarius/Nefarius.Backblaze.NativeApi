@@ -30,6 +30,10 @@ public class BackblazeUploader : IBackblazeUploader
             throw new InvalidOperationException("Backblaze BucketId is not configured.");
     }
 
+    // ---------------------------------------------------------------------
+    // PUBLIC OVERLOADS
+    // ---------------------------------------------------------------------
+
     public async Task UploadAsync(string filePath, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
@@ -37,18 +41,56 @@ public class BackblazeUploader : IBackblazeUploader
         if (!File.Exists(filePath))
             throw new FileNotFoundException("File to upload not found.", filePath);
 
-        // 1. Authorize
+        await using var stream = File.OpenRead(filePath);
+        var fileName = Path.GetFileName(filePath);
+
+        await UploadInternalAsync(stream, fileName, cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task UploadAsync(string filePath, string targetFileName, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+        ArgumentException.ThrowIfNullOrWhiteSpace(targetFileName);
+
+        if (!File.Exists(filePath))
+            throw new FileNotFoundException("File to upload not found.", filePath);
+
+        await using var stream = File.OpenRead(filePath);
+        await UploadInternalAsync(stream, targetFileName, cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task UploadAsync(Stream content, string targetFileName, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+        ArgumentException.ThrowIfNullOrWhiteSpace(targetFileName);
+
+        await UploadInternalAsync(content, targetFileName, cancellationToken).ConfigureAwait(false);
+    }
+
+    // ---------------------------------------------------------------------
+    // INTERNAL UPLOAD LOGIC
+    // ---------------------------------------------------------------------
+
+    private async Task UploadInternalAsync(Stream stream, string targetFileName, CancellationToken cancellationToken)
+    {
+        if (stream.CanSeek)
+            stream.Seek(0, SeekOrigin.Begin);
+
+        // 1. Compute SHA1
+        var sha1 = ComputeSha1(stream);
+
+        if (stream.CanSeek)
+            stream.Seek(0, SeekOrigin.Begin);
+
+        // 2. Authorize
         var authResponse = await AuthorizeAsync(cancellationToken).ConfigureAwait(false);
 
-        // 2. Get upload URL for the bucket
+        // 3. Get upload URL
         var uploadUrlResponse = await GetUploadUrlAsync(authResponse, cancellationToken)
             .ConfigureAwait(false);
 
-        // 3. Compute SHA1 of file
-        var sha1 = ComputeSha1(filePath);
-
-        // 4. Upload file
-        await UploadFileAsync(uploadUrlResponse, filePath, sha1, cancellationToken)
+        // 4. Upload
+        await UploadFileAsync(uploadUrlResponse, stream, targetFileName, sha1, cancellationToken)
             .ConfigureAwait(false);
     }
 
@@ -87,7 +129,8 @@ public class BackblazeUploader : IBackblazeUploader
 
     private async Task UploadFileAsync(
         B2GetUploadUrlResponse uploadUrl,
-        string filePath,
+        Stream stream,
+        string rawFileName,
         string sha1,
         CancellationToken cancellationToken)
     {
@@ -96,22 +139,11 @@ public class BackblazeUploader : IBackblazeUploader
 
         var api = RestService.For<IB2UploadApi>(client);
 
-        using var fs = File.OpenRead(filePath);
-
-        var rawFileName = Path.GetFileName(filePath);
-
-        // Encode filename for Backblaze (X-Bz-File-Name)
+        // --- Backblaze filename & Content-Disposition handling ---
         var encodedFileName = Uri.EscapeDataString(rawFileName);
-
-        // RFC 5987 UTF-8 encoding for filename*
         var utf8FileName = Uri.EscapeDataString(rawFileName);
+        var asciiFallback = new string(rawFileName.Select(c => c <= 127 ? c : '_').ToArray());
 
-        // ASCII-only fallback filename (replace non-ASCII with '_')
-        var asciiFallback = new string(rawFileName
-            .Select(c => c <= 127 ? c : '_')
-            .ToArray());
-
-        // Content-Disposition (UTF-8 + fallback)
         var contentDisposition =
             Uri.EscapeDataString($"attachment; filename=\"{asciiFallback}\"; filename*=UTF-8''{utf8FileName}");
 
@@ -121,7 +153,7 @@ public class BackblazeUploader : IBackblazeUploader
             "b2/x-auto",
             sha1,
             contentDisposition,
-            fs,
+            stream,
             cancellationToken).ConfigureAwait(false);
 
         if (!response.IsSuccessStatusCode)
@@ -130,9 +162,8 @@ public class BackblazeUploader : IBackblazeUploader
                 $"{response.Error?.Content}");
     }
 
-    private static string ComputeSha1(string filePath)
+    private static string ComputeSha1(Stream stream)
     {
-        using var stream = File.OpenRead(filePath);
         using var sha1 = SHA1.Create();
         var hash = sha1.ComputeHash(stream);
         return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
