@@ -8,3 +8,7 @@
 Small wrapper for Backblaze B2 Native API using Refit.
 
 WIP
+
+## Documentation
+
+[Link to API docs](docs/index.md).
