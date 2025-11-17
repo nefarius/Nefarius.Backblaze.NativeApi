@@ -140,9 +140,10 @@ public class BackblazeUploader : IBackblazeUploader
         var api = RestService.For<IB2UploadApi>(client);
 
         // --- Backblaze filename & Content-Disposition handling ---
+        var filenameOnly = Path.GetFileName(rawFileName);
         var encodedFileName = Uri.EscapeDataString(rawFileName);
-        var utf8FileName = Uri.EscapeDataString(rawFileName);
-        var asciiFallback = new string(rawFileName.Select(c => c <= 127 ? c : '_').ToArray());
+        var utf8FileName = Uri.EscapeDataString(filenameOnly);
+        var asciiFallback = new string(filenameOnly.Select(c => c <= 127 ? c : '_').ToArray());
 
         var contentDisposition =
             Uri.EscapeDataString($"attachment; filename=\"{asciiFallback}\"; filename*=UTF-8''{utf8FileName}");
