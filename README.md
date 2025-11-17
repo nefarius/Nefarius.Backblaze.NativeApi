@@ -7,8 +7,19 @@
 
 Small wrapper for Backblaze B2 Native API using Refit.
 
-WIP
+> [!IMPORTANT]
+> This project is still evolving, so API-breaking changes might occur each update!
+
+## About
+
+A thin dotnet wrapper library for the Backblaze B2 Native API that will grow with the author's needs.
+
+Currently only covers [file uploads](https://www.backblaze.com/docs/cloud-storage-upload-files-with-the-native-api).
 
 ## Documentation
 
 [Link to API docs](docs/index.md).
+
+## 3rd party credits
+
+- [Refit](https://github.com/reactiveui/refit)
