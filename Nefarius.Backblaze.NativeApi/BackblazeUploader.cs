@@ -160,7 +160,7 @@ public class BackblazeUploader : IBackblazeUploader
         string asciiFallback = new(filenameOnly.Select(c => c <= 127 ? c : '_').ToArray());
 
         string contentDisposition =
-            Uri.EscapeDataString($"attachment; filename=\"{asciiFallback}\"; filename*=UTF-8''{utf8FileName}");
+            Uri.EscapeDataString($"attachment; filename={asciiFallback}; filename*=UTF-8''{utf8FileName}");
 
         ApiResponse<string> response = await api.UploadAsync(
             uploadUrl.AuthorizationToken,

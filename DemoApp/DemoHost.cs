@@ -4,7 +4,7 @@ using Nefarius.Backblaze.NativeApi;
 
 namespace DemoApp;
 
-public class DemoHost(IBackblazeUploader uploader) : BackgroundService
+internal sealed class DemoHost(IBackblazeUploader uploader) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
