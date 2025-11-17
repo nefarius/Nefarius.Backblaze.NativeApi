@@ -96,12 +96,26 @@ public class BackblazeUploader : IBackblazeUploader
 
         using var fs = File.OpenRead(filePath);
 
-        var fileName = Path.GetFileName(filePath);
-        var contentDisposition = $"attachment; filename=\"{fileName}\"";
+        var rawFileName = Path.GetFileName(filePath);
+
+        // Encode filename for Backblaze (X-Bz-File-Name)
+        var encodedFileName = Uri.EscapeDataString(rawFileName);
+
+        // RFC 5987 UTF-8 encoding for filename*
+        var utf8FileName = Uri.EscapeDataString(rawFileName);
+
+        // ASCII-only fallback filename (replace non-ASCII with '_')
+        var asciiFallback = new string(rawFileName
+            .Select(c => c <= 127 ? c : '_')
+            .ToArray());
+
+        // Content-Disposition (UTF-8 + fallback)
+        var contentDisposition =
+            $"attachment; filename=\"{asciiFallback}\"; filename*=UTF-8''{utf8FileName}";
 
         var response = await api.UploadAsync(
             uploadUrl.AuthorizationToken,
-            fileName,
+            encodedFileName,
             "b2/x-auto",
             sha1,
             contentDisposition,
