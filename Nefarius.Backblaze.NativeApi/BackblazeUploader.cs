@@ -1,9 +1,12 @@
 ﻿using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
+
 using Microsoft.Extensions.Options;
+
 using Nefarius.Backblaze.NativeApi.WebApi;
 using Nefarius.Backblaze.NativeApi.WebApi.Models;
+
 using Refit;
 
 namespace Nefarius.Backblaze.NativeApi;
@@ -21,13 +24,19 @@ public class BackblazeUploader : IBackblazeUploader
         _httpClientFactory = httpClientFactory;
 
         if (string.IsNullOrWhiteSpace(_options.KeyId))
+        {
             throw new InvalidOperationException("Backblaze KeyId is not configured.");
+        }
 
         if (string.IsNullOrWhiteSpace(_options.ApplicationKey))
+        {
             throw new InvalidOperationException("Backblaze ApplicationKey is not configured.");
+        }
 
         if (string.IsNullOrWhiteSpace(_options.BucketId))
+        {
             throw new InvalidOperationException("Backblaze BucketId is not configured.");
+        }
     }
 
     // ---------------------------------------------------------------------
@@ -39,10 +48,12 @@ public class BackblazeUploader : IBackblazeUploader
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
 
         if (!File.Exists(filePath))
+        {
             throw new FileNotFoundException("File to upload not found.", filePath);
+        }
 
-        await using var stream = File.OpenRead(filePath);
-        var fileName = Path.GetFileName(filePath);
+        await using FileStream stream = File.OpenRead(filePath);
+        string fileName = Path.GetFileName(filePath);
 
         await UploadInternalAsync(stream, fileName, cancellationToken).ConfigureAwait(false);
     }
@@ -53,9 +64,11 @@ public class BackblazeUploader : IBackblazeUploader
         ArgumentException.ThrowIfNullOrWhiteSpace(targetFileName);
 
         if (!File.Exists(filePath))
+        {
             throw new FileNotFoundException("File to upload not found.", filePath);
+        }
 
-        await using var stream = File.OpenRead(filePath);
+        await using FileStream stream = File.OpenRead(filePath);
         await UploadInternalAsync(stream, targetFileName, cancellationToken).ConfigureAwait(false);
     }
 
@@ -74,19 +87,23 @@ public class BackblazeUploader : IBackblazeUploader
     private async Task UploadInternalAsync(Stream stream, string targetFileName, CancellationToken cancellationToken)
     {
         if (stream.CanSeek)
+        {
             stream.Seek(0, SeekOrigin.Begin);
+        }
 
         // 1. Compute SHA1
-        var sha1 = ComputeSha1(stream);
+        string sha1 = ComputeSha1(stream);
 
         if (stream.CanSeek)
+        {
             stream.Seek(0, SeekOrigin.Begin);
+        }
 
         // 2. Authorize
-        var authResponse = await AuthorizeAsync(cancellationToken).ConfigureAwait(false);
+        B2AuthorizeAccountResponse authResponse = await AuthorizeAsync(cancellationToken).ConfigureAwait(false);
 
         // 3. Get upload URL
-        var uploadUrlResponse = await GetUploadUrlAsync(authResponse, cancellationToken)
+        B2GetUploadUrlResponse uploadUrlResponse = await GetUploadUrlAsync(authResponse, cancellationToken)
             .ConfigureAwait(false);
 
         // 4. Upload
@@ -96,15 +113,15 @@ public class BackblazeUploader : IBackblazeUploader
 
     private async Task<B2AuthorizeAccountResponse> AuthorizeAsync(CancellationToken cancellationToken)
     {
-        var client = _httpClientFactory.CreateClient(BackblazeHttpClientNames.Authorization);
+        HttpClient client = _httpClientFactory.CreateClient(BackblazeHttpClientNames.Authorization);
 
-        var authValue = Convert.ToBase64String(
+        string authValue = Convert.ToBase64String(
             Encoding.UTF8.GetBytes($"{_options.KeyId}:{_options.ApplicationKey}"));
 
         client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Basic", authValue);
 
-        var api = RestService.For<IB2AuthorizationApi>(client);
+        IB2AuthorizationApi api = RestService.For<IB2AuthorizationApi>(client);
 
         return await api.AuthorizeAsync(cancellationToken).ConfigureAwait(false);
     }
@@ -113,15 +130,12 @@ public class BackblazeUploader : IBackblazeUploader
         B2AuthorizeAccountResponse auth,
         CancellationToken cancellationToken)
     {
-        var client = _httpClientFactory.CreateClient(BackblazeHttpClientNames.Api);
+        HttpClient client = _httpClientFactory.CreateClient(BackblazeHttpClientNames.Api);
         client.BaseAddress = new Uri(auth.ApiUrl);
 
-        var api = RestService.For<IB2BucketApi>(client);
+        IB2BucketApi api = RestService.For<IB2BucketApi>(client);
 
-        var request = new B2GetUploadUrlRequest
-        {
-            BucketId = _options.BucketId
-        };
+        B2GetUploadUrlRequest request = new() { BucketId = _options.BucketId };
 
         return await api.GetUploadUrlAsync(request, auth.AuthorizationToken, cancellationToken)
             .ConfigureAwait(false);
@@ -134,21 +148,21 @@ public class BackblazeUploader : IBackblazeUploader
         string sha1,
         CancellationToken cancellationToken)
     {
-        var client = _httpClientFactory.CreateClient(BackblazeHttpClientNames.Upload);
+        HttpClient client = _httpClientFactory.CreateClient(BackblazeHttpClientNames.Upload);
         client.BaseAddress = new Uri(uploadUrl.UploadUrl);
 
-        var api = RestService.For<IB2UploadApi>(client);
+        IB2UploadApi api = RestService.For<IB2UploadApi>(client);
 
         // --- Backblaze filename & Content-Disposition handling ---
-        var filenameOnly = Path.GetFileName(rawFileName);
-        var encodedFileName = Uri.EscapeDataString(rawFileName);
-        var utf8FileName = Uri.EscapeDataString(filenameOnly);
-        var asciiFallback = new string(filenameOnly.Select(c => c <= 127 ? c : '_').ToArray());
+        string filenameOnly = Path.GetFileName(rawFileName);
+        string encodedFileName = Uri.EscapeDataString(rawFileName);
+        string utf8FileName = Uri.EscapeDataString(filenameOnly);
+        string asciiFallback = new(filenameOnly.Select(c => c <= 127 ? c : '_').ToArray());
 
-        var contentDisposition =
+        string contentDisposition =
             Uri.EscapeDataString($"attachment; filename=\"{asciiFallback}\"; filename*=UTF-8''{utf8FileName}");
 
-        var response = await api.UploadAsync(
+        ApiResponse<string> response = await api.UploadAsync(
             uploadUrl.AuthorizationToken,
             encodedFileName,
             "b2/x-auto",
@@ -158,15 +172,17 @@ public class BackblazeUploader : IBackblazeUploader
             cancellationToken).ConfigureAwait(false);
 
         if (!response.IsSuccessStatusCode)
+        {
             throw new InvalidOperationException(
                 $"Backblaze B2 upload failed: {(int)response.StatusCode} {response.StatusCode}\n" +
                 $"{response.Error?.Content}");
+        }
     }
 
     private static string ComputeSha1(Stream stream)
     {
-        using var sha1 = SHA1.Create();
-        var hash = sha1.ComputeHash(stream);
+        using SHA1 sha1 = SHA1.Create();
+        byte[] hash = sha1.ComputeHash(stream);
         return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
     }
 }

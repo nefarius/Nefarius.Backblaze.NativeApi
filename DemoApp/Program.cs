@@ -1,11 +1,13 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using DemoApp;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using Nefarius.Backblaze.NativeApi;
 
-var builder = Host.CreateApplicationBuilder(args);
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.AddBackblazeUploader(options =>
 {
@@ -16,6 +18,6 @@ builder.Services.AddBackblazeUploader(options =>
 
 builder.Services.AddHostedService<DemoHost>();
 
-var host = builder.Build();
+IHost host = builder.Build();
 
 await host.RunAsync();

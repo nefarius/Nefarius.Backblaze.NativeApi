@@ -1,4 +1,5 @@
 using Nefarius.Backblaze.NativeApi.WebApi.Models;
+
 using Refit;
 
 namespace Nefarius.Backblaze.NativeApi.WebApi;
