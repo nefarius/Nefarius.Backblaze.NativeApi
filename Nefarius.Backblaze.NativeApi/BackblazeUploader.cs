@@ -183,6 +183,6 @@ public class BackblazeUploader : IBackblazeUploader
     {
         using SHA1 sha1 = SHA1.Create();
         byte[] hash = sha1.ComputeHash(stream);
-        return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+        return Convert.ToHexStringLower(hash);
     }
 }
