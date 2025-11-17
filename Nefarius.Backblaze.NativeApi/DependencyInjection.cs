@@ -8,10 +8,7 @@ public static class DependencyInjection
         this IServiceCollection services,
         Action<BackblazeOptions> configureOptions)
     {
-        if (configureOptions is null)
-        {
-            throw new ArgumentNullException(nameof(configureOptions));
-        }
+        ArgumentNullException.ThrowIfNull(configureOptions);
 
         services.Configure(configureOptions);
 
