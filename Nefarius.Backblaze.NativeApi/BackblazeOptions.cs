@@ -11,7 +11,7 @@ namespace Nefarius.Backblaze.NativeApi;
 ///     and the bucket ID for a specific B2 bucket. This class is typically configured through
 ///     dependency injection and used by services requiring Backblaze authentication and interaction.
 /// </remarks>
-public class BackblazeOptions
+public sealed class BackblazeOptions
 {
     public const string SectionName = "Backblaze";
 
