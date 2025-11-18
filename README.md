@@ -5,7 +5,7 @@
 [![Nuget](https://img.shields.io/nuget/v/Nefarius.Backblaze.NativeApi)](https://www.nuget.org/packages/Nefarius.Backblaze.NativeApi/)
 [![Nuget](https://img.shields.io/nuget/dt/Nefarius.Backblaze.NativeApi)](https://www.nuget.org/packages/Nefarius.Backblaze.NativeApi/)
 
-Small wrapper for Backblaze B2 Native API using [Refit](https://github.com/reactiveui/refit).
+Small wrapper for [Backblaze B2 Native API](https://www.backblaze.com/docs/cloud-storage-native-api) using [Refit](https://github.com/reactiveui/refit).
 
 > [!IMPORTANT]
 > This project is still evolving, so API-breaking changes might occur each update!
