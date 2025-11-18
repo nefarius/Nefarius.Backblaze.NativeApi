@@ -5,7 +5,7 @@ Namespace: Nefarius.Backblaze.NativeApi
 Represents configuration options for interacting with Backblaze B2 cloud storage.
 
 ```csharp
-public class BackblazeOptions
+public sealed class BackblazeOptions
 ```
 
 Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → [BackblazeOptions](./nefarius.backblaze.nativeapi.backblazeoptions.md)
