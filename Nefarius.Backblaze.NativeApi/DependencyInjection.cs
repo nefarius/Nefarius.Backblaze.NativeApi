@@ -35,6 +35,7 @@ public static class DependencyInjection
         services.AddHttpClient(BackblazeHttpClientNames.Upload);
 
         services.AddSingleton<IBackblazeUploader, BackblazeUploader>();
+        services.AddSingleton<IBackblazeBucketClient, BackblazeBucketClient>();
 
         return services;
     }
