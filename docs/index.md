@@ -2,11 +2,15 @@
 
 ## Namespace Nefarius.Backblaze.NativeApi
 
+- [BackblazeBucketClient](./nefarius.backblaze.nativeapi.backblazebucketclient.md)
+
 - [BackblazeOptions](./nefarius.backblaze.nativeapi.backblazeoptions.md)
 
 - [BackblazeUploader](./nefarius.backblaze.nativeapi.backblazeuploader.md)
 
 - [DependencyInjection](./nefarius.backblaze.nativeapi.dependencyinjection.md)
+
+- [IBackblazeBucketClient](./nefarius.backblaze.nativeapi.ibackblazebucketclient.md)
 
 - [IBackblazeUploader](./nefarius.backblaze.nativeapi.ibackblazeuploader.md)
 
@@ -25,3 +29,9 @@
 - [B2GetUploadUrlRequest](./nefarius.backblaze.nativeapi.webapi.models.b2getuploadurlrequest.md)
 
 - [B2GetUploadUrlResponse](./nefarius.backblaze.nativeapi.webapi.models.b2getuploadurlresponse.md)
+
+- [B2ListFileNamesRequest](./nefarius.backblaze.nativeapi.webapi.models.b2listfilenamesrequest.md)
+
+- [B2ListFileNamesResponse](./nefarius.backblaze.nativeapi.webapi.models.b2listfilenamesresponse.md)
+
+- [B2StorageFile](./nefarius.backblaze.nativeapi.webapi.models.b2storagefile.md)
