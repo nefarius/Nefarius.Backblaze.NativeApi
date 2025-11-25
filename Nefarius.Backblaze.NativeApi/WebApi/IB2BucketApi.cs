@@ -21,4 +21,17 @@ public interface IB2BucketApi
         [Body] B2GetUploadUrlRequest request,
         [Header("Authorization")] string authToken,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Lists file names stored within the specified bucket.
+    /// </summary>
+    /// <param name="request">The request containing the bucket identifier and optional pagination details.</param>
+    /// <param name="authToken">The authorization token required to access the bucket.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A response containing the file names and pagination marker.</returns>
+    [Post("/b2api/v2/b2_list_file_names")]
+    Task<B2ListFileNamesResponse> ListFileNamesAsync(
+        [Body] B2ListFileNamesRequest request,
+        [Header("Authorization")] string authToken,
+        CancellationToken cancellationToken = default);
 }
