@@ -55,6 +55,32 @@ public sealed class BackblazeBucketClient : IBackblazeBucketClient
             .ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
+    public async Task<B2ListFileVersionsResponse> ListFileVersionsAsync(
+        string? startFileName = null,
+        string? startFileId = null,
+        int? maxFileCount = null,
+        CancellationToken cancellationToken = default)
+    {
+        B2AuthorizeAccountResponse authResponse = await AuthorizeAsync(cancellationToken).ConfigureAwait(false);
+
+        HttpClient client = _httpClientFactory.CreateClient(BackblazeHttpClientNames.Api);
+        client.BaseAddress = new Uri(authResponse.ApiUrl);
+
+        IB2BucketApi api = RestService.For<IB2BucketApi>(client);
+
+        B2ListFileVersionsRequest request = new()
+        {
+            BucketId = _options.BucketId,
+            StartFileName = startFileName,
+            StartFileId = startFileId,
+            MaxFileCount = maxFileCount
+        };
+
+        return await api.ListFileVersionsAsync(request, authResponse.AuthorizationToken, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
     private async Task<B2AuthorizeAccountResponse> AuthorizeAsync(CancellationToken cancellationToken)
     {
         HttpClient client = _httpClientFactory.CreateClient(BackblazeHttpClientNames.Authorization);

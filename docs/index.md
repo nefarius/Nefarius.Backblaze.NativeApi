@@ -34,4 +34,8 @@
 
 - [B2ListFileNamesResponse](./nefarius.backblaze.nativeapi.webapi.models.b2listfilenamesresponse.md)
 
+- [B2ListFileVersionsRequest](./nefarius.backblaze.nativeapi.webapi.models.b2listfileversionsrequest.md)
+
+- [B2ListFileVersionsResponse](./nefarius.backblaze.nativeapi.webapi.models.b2listfileversionsresponse.md)
+
 - [B2StorageFile](./nefarius.backblaze.nativeapi.webapi.models.b2storagefile.md)

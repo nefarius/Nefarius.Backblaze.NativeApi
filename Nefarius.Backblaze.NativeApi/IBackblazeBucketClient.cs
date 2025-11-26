@@ -18,4 +18,18 @@ public interface IBackblazeBucketClient
         string? startFileName = null,
         int? maxFileCount = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Lists different versions of files in the configured Backblaze bucket.
+    /// </summary>
+    /// <param name="startFileName">Optional file name to start listing from.</param>
+    /// <param name="startFileId">Optional file identifier to start listing from.</param>
+    /// <param name="maxFileCount">Optional maximum number of file versions to return.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>The file versions and pagination markers returned by Backblaze.</returns>
+    Task<B2ListFileVersionsResponse> ListFileVersionsAsync(
+        string? startFileName = null,
+        string? startFileId = null,
+        int? maxFileCount = null,
+        CancellationToken cancellationToken = default);
 }

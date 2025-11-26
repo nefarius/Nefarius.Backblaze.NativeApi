@@ -55,3 +55,26 @@ A token to monitor for cancellation requests.
 #### Returns
 
 A response containing the file names and pagination marker.
+
+### <a id="methods-listfileversionsasync"/>**ListFileVersionsAsync(B2ListFileVersionsRequest, String, CancellationToken)**
+
+Lists file versions stored within the specified bucket.
+
+```csharp
+Task<B2ListFileVersionsResponse> ListFileVersionsAsync(B2ListFileVersionsRequest request, string authToken, CancellationToken cancellationToken)
+```
+
+#### Parameters
+
+`request` [B2ListFileVersionsRequest](./nefarius.backblaze.nativeapi.webapi.models.b2listfileversionsrequest.md)<br>
+The request containing the bucket identifier and optional pagination details.
+
+`authToken` [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+The authorization token required to access the bucket.
+
+`cancellationToken` [CancellationToken](https://docs.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken)<br>
+A token to monitor for cancellation requests.
+
+#### Returns
+
+A response containing the file versions and pagination markers.
