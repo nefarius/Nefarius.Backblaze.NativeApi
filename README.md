@@ -14,7 +14,7 @@ Small wrapper for [Backblaze B2 Native API](https://www.backblaze.com/docs/cloud
 
 A thin dotnet wrapper library for the Backblaze B2 Native API that will grow with the author's needs.
 
-Currently only covers [file uploads](https://www.backblaze.com/docs/cloud-storage-upload-files-with-the-native-api).
+It currently covers file uploads, getting file names and file versions.
 
 ## Documentation
 
