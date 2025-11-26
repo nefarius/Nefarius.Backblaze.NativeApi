@@ -26,7 +26,8 @@ public IEnumerable<B2StorageFile> Files { get; set; }
 
 ### <a id="properties-nextfileid"/>**NextFileId**
 
-Gets or sets the identifier of the next file to start the listing from, or null when there are no additional versions.
+Gets or sets the identifier of the next file to start the listing from, or null when
+ there are no additional versions.
 
 ```csharp
 public string NextFileId { get; set; }
@@ -38,7 +39,8 @@ public string NextFileId { get; set; }
 
 ### <a id="properties-nextfilename"/>**NextFileName**
 
-Gets or sets the name of the next file to start the listing from, or null when there are no additional versions.
+Gets or sets the name of the next file to start the listing from, or null when
+ there are no additional versions.
 
 ```csharp
 public string NextFileName { get; set; }
