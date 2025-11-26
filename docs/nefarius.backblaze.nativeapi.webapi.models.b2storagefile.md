@@ -24,24 +24,24 @@ public string AccountId { get; set; }
 
 [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
 
-### <a id="properties-bucketid"/>**BucketId**
-
-Gets or sets the identifier of the bucket containing the file.
-
-```csharp
-public string BucketId { get; set; }
-```
-
-#### Property Value
-
-[String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
-
 ### <a id="properties-action"/>**Action**
 
 Gets or sets the action that created this file version, such as "upload" or "delete".
 
 ```csharp
 public string Action { get; set; }
+```
+
+#### Property Value
+
+[String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+
+### <a id="properties-bucketid"/>**BucketId**
+
+Gets or sets the identifier of the bucket containing the file.
+
+```csharp
+public string BucketId { get; set; }
 ```
 
 #### Property Value

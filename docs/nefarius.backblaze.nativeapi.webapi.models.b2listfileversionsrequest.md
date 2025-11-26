@@ -38,7 +38,8 @@ public Nullable<Int32> MaxFileCount { get; set; }
 
 ### <a id="properties-startfileid"/>**StartFileId**
 
-Gets or sets the file identifier to start listing from, used together with StartFileName for pagination.
+Gets or sets the file identifier to start listing from, used together with [B2ListFileVersionsRequest.StartFileName](./nefarius.backblaze.nativeapi.webapi.models.b2listfileversionsrequest.md#startfilename)
+ for pagination.
 
 ```csharp
 public string StartFileId { get; set; }
@@ -50,7 +51,8 @@ public string StartFileId { get; set; }
 
 ### <a id="properties-startfilename"/>**StartFileName**
 
-Gets or sets the file name to start listing from. If null, listing starts from the first file in the bucket.
+Gets or sets the file name to start listing from. If null, listing starts from the first
+ file in the bucket.
 
 ```csharp
 public string StartFileName { get; set; }
