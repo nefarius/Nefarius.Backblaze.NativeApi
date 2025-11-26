@@ -48,3 +48,23 @@ public Task<B2ListFileNamesResponse> ListFileNamesAsync(string startFileName, Nu
 #### Returns
 
 [Task&lt;B2ListFileNamesResponse&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1)
+
+### <a id="methods-listfileversionsasync"/>**ListFileVersionsAsync(String, String, Nullable&lt;Int32&gt;, CancellationToken)**
+
+```csharp
+public Task<B2ListFileVersionsResponse> ListFileVersionsAsync(string startFileName, string startFileId, Nullable<Int32> maxFileCount, CancellationToken cancellationToken)
+```
+
+#### Parameters
+
+`startFileName` [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+
+`startFileId` [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+
+`maxFileCount` [Nullable&lt;Int32&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.nullable-1)<br>
+
+`cancellationToken` [CancellationToken](https://docs.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken)<br>
+
+#### Returns
+
+[Task&lt;B2ListFileVersionsResponse&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task-1)

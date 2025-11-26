@@ -20,6 +20,12 @@ public sealed class B2StorageFile
     public string BucketId { get; set; }
 
     /// <summary>
+    ///     Gets or sets the action that created this file version, such as "upload" or "delete".
+    /// </summary>
+    [JsonPropertyName("action")]
+    public string Action { get; set; }
+
+    /// <summary>
     ///     Gets or sets the unique identifier assigned to the file.
     /// </summary>
     [JsonPropertyName("fileId")]

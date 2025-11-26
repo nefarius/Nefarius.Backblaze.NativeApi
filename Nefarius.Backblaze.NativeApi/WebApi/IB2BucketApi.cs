@@ -34,4 +34,17 @@ public interface IB2BucketApi
         [Body] B2ListFileNamesRequest request,
         [Header("Authorization")] string authToken,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Lists file versions stored within the specified bucket.
+    /// </summary>
+    /// <param name="request">The request containing the bucket identifier and optional pagination details.</param>
+    /// <param name="authToken">The authorization token required to access the bucket.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A response containing the file versions and pagination markers.</returns>
+    [Post("/b2api/v2/b2_list_file_versions")]
+    Task<B2ListFileVersionsResponse> ListFileVersionsAsync(
+        [Body] B2ListFileVersionsRequest request,
+        [Header("Authorization")] string authToken,
+        CancellationToken cancellationToken = default);
 }
