@@ -16,7 +16,7 @@ public static class DependencyInjection
     ///     settings.
     /// </param>
     /// <returns>The updated service collection with Backblaze services registered.</returns>
-    public static IServiceCollection AddBackblazeUploader(
+    public static IServiceCollection AddBackblazeBucket(
         this IServiceCollection services,
         Action<BackblazeOptions> configureOptions)
     {

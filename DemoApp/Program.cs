@@ -9,7 +9,7 @@ using Nefarius.Backblaze.NativeApi;
 
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
-builder.Services.AddBackblazeUploader(options =>
+builder.Services.AddBackblazeBucket(options =>
 {
     options.KeyId = builder.Configuration["Backblaze:KeyId"];
     options.ApplicationKey = builder.Configuration["Backblaze:ApplicationKey"];
