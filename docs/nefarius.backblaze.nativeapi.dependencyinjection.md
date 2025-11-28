@@ -12,12 +12,12 @@ Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) 
 
 ## Methods
 
-### <a id="methods-addbackblazeuploader"/>**AddBackblazeUploader(IServiceCollection, Action&lt;BackblazeOptions&gt;)**
+### <a id="methods-addbackblazebucket"/>**AddBackblazeBucket(IServiceCollection, Action&lt;BackblazeOptions&gt;)**
 
 Registers services required for using Backblaze B2 cloud storage within the dependency injection container.
 
 ```csharp
-public static IServiceCollection AddBackblazeUploader(IServiceCollection services, Action<BackblazeOptions> configureOptions)
+public static IServiceCollection AddBackblazeBucket(IServiceCollection services, Action<BackblazeOptions> configureOptions)
 ```
 
 #### Parameters
